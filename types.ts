@@ -1,3 +1,4 @@
+
 export interface AnalysisResult {
     isAvailable: boolean;
     score: number;
@@ -33,3 +34,17 @@ export interface StepProps {
     onBack?: () => void;
     data?: Partial<RegistrationData>;
 }
+
+export interface Article {
+    id: string;
+    title: string;
+    subtitle?: string;
+    tag: string;
+    readTime: string;
+    date: string;
+    image: string;
+    content: string;
+    relatedIds: string[];
+}
+
+export type ViewType = 'landing' | 'wizard' | 'dashboard' | 'resources' | 'admin' | 'vendor' | 'admin-refunds' | 'phone-selection' | 'web-identity' | 'compliance' | 'ecosystem' | 'admin-help-desk' | 'super-admin-security' | 'seo-guide' | 'super-admin-analytics' | 'mobile-seo' | 'expert-profile' | 'expert-booking' | 'super-admin-partner-strategy' | 'affiliate-portal' | 'super-admin-launch-checklist' | 'article';

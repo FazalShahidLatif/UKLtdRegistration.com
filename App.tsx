@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { RegistrationData } from './types';
+import { RegistrationData, ViewType } from './types';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { LandingPage } from './components/LandingPage';
@@ -27,16 +27,18 @@ import { ExpertBookingPage } from './components/ExpertBookingPage';
 import { SuperAdminPartnerStrategyPage } from './components/SuperAdminPartnerStrategyPage';
 import { AffiliatePortalPage } from './components/AffiliatePortalPage';
 import { SuperAdminLaunchChecklistPage } from './components/SuperAdminLaunchChecklistPage';
+import { ArticleReader } from './components/ArticleReader';
 
 export const App = () => {
-    const [view, setView] = useState<'landing' | 'wizard' | 'dashboard' | 'resources' | 'admin' | 'vendor' | 'admin-refunds' | 'phone-selection' | 'web-identity' | 'compliance' | 'ecosystem' | 'admin-help-desk' | 'super-admin-security' | 'seo-guide' | 'super-admin-analytics' | 'mobile-seo' | 'expert-profile' | 'expert-booking' | 'super-admin-partner-strategy' | 'affiliate-portal' | 'super-admin-launch-checklist'>('landing');
+    const [view, setView] = useState<ViewType>('landing');
+    const [activeId, setActiveId] = useState<string | null>(null);
     const [step, setStep] = useState(1);
     const [formData, setFormData] = useState<Partial<RegistrationData>>({});
 
     // Ensure smooth scrolling on view changes
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [view, step]);
+    }, [view, step, activeId]);
 
     const handleStartWizard = (data?: Partial<RegistrationData>) => {
         if (data) {
@@ -64,6 +66,7 @@ export const App = () => {
         setView('landing');
         setStep(1);
         setFormData({});
+        setActiveId(null);
     }
 
     const handleFinish = (finalData: Partial<RegistrationData>) => {
@@ -75,17 +78,18 @@ export const App = () => {
         handleStartWizard();
     }
 
-    const handleNavigate = (targetView: string) => {
+    const handleNavigate = (targetView: string, id?: string) => {
         const validViews: any[] = [
             'landing', 'wizard', 'dashboard', 'resources', 'admin', 'vendor', 
             'admin-refunds', 'phone-selection', 'web-identity', 'compliance', 
             'ecosystem', 'admin-help-desk', 'super-admin-security', 'seo-guide', 
             'super-admin-analytics', 'mobile-seo', 'expert-profile', 'expert-booking', 
-            'super-admin-partner-strategy', 'affiliate-portal', 'super-admin-launch-checklist'
+            'super-admin-partner-strategy', 'affiliate-portal', 'super-admin-launch-checklist', 'article'
         ];
         
         if (validViews.includes(targetView)) {
             setView(targetView as any);
+            if (id) setActiveId(id);
             if (targetView === 'wizard') setStep(1);
         }
     }
@@ -111,11 +115,12 @@ export const App = () => {
             case 'super-admin-partner-strategy': return <SuperAdminPartnerStrategyPage onNavigate={handleNavigate} />;
             case 'affiliate-portal': return <AffiliatePortalPage onNavigate={handleNavigate} onLogout={handleGoHome} />;
             case 'super-admin-launch-checklist': return <SuperAdminLaunchChecklistPage onNavigate={handleNavigate} />;
+            case 'article': return <ArticleReader articleId={activeId || ''} onNavigate={handleNavigate} />;
             default: return null;
         }
     }
 
-    const specialViews = ['dashboard', 'admin', 'vendor', 'admin-refunds', 'phone-selection', 'web-identity', 'compliance', 'ecosystem', 'admin-help-desk', 'super-admin-security', 'seo-guide', 'super-admin-analytics', 'mobile-seo', 'expert-profile', 'expert-booking', 'super-admin-partner-strategy', 'affiliate-portal', 'super-admin-launch-checklist'];
+    const specialViews = ['dashboard', 'admin', 'vendor', 'admin-refunds', 'phone-selection', 'web-identity', 'compliance', 'ecosystem', 'admin-help-desk', 'super-admin-security', 'seo-guide', 'super-admin-analytics', 'mobile-seo', 'expert-profile', 'expert-booking', 'super-admin-partner-strategy', 'affiliate-portal', 'super-admin-launch-checklist', 'article'];
 
     if (specialViews.includes(view)) {
         return renderView();

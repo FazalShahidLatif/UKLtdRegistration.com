@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import { NewsletterModal } from './NewsletterModal';
+import { ARTICLES } from '../data/articles';
 
-export const ResourceHub = ({ onNavigate }: { onNavigate: (view: string) => void }) => {
+export const ResourceHub = ({ onNavigate }: { onNavigate: (view: string, id?: string) => void }) => {
     const [showNewsletter, setShowNewsletter] = useState(false);
 
     return (
@@ -22,9 +23,7 @@ export const ResourceHub = ({ onNavigate }: { onNavigate: (view: string) => void
             </section>
             
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                {/* Main Content Column */}
                 <div className="lg:col-span-8 space-y-20">
-                    
                     <section>
                         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-8 mb-12">
                             <h2 className="text-3xl font-black text-slate-900 dark:text-white">Pillar Guides</h2>
@@ -35,37 +34,24 @@ export const ResourceHub = ({ onNavigate }: { onNavigate: (view: string) => void
                         </div>
                         
                         <div className="flex flex-col gap-12">
-                            {[
-                                {
-                                    title: "Non-Resident Banking in the UK: 2026 Strategy",
-                                    desc: "A comprehensive audit of digital and high-street banks for international Ltd directors seeking stable GBP settlement.",
-                                    img: "https://images.unsplash.com/photo-1550565118-3a14e8d0386f?auto=format&fit=crop&w=800&q=80",
-                                    tag: "Banking & Finance"
-                                },
-                                {
-                                    title: "Double Taxation Treaties: USA to UK",
-                                    desc: "How Delaware LLCs and C-Corps can leverage UK Limited entities for tax optimization in the European market.",
-                                    img: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80",
-                                    tag: "Legal & Taxation"
-                                },
-                                {
-                                    title: "Post-Brexit VAT Compliance for E-commerce",
-                                    desc: "Understanding the new registration thresholds and OSS requirements for selling into the UK and EU.",
-                                    img: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=800&q=80",
-                                    tag: "E-Commerce"
-                                }
-                            ].map((article, i) => (
-                                <div key={i} className="group flex flex-col md:flex-row gap-10 cursor-pointer items-start">
+                            {ARTICLES.map((article, i) => (
+                                <div 
+                                    key={article.id} 
+                                    className="group flex flex-col md:flex-row gap-10 cursor-pointer items-start"
+                                    onClick={() => onNavigate('article', article.id)}
+                                >
                                     <div className="w-full md:w-72 aspect-[16/10] overflow-hidden rounded-3xl shrink-0 border border-slate-100 dark:border-slate-800 shadow-sm group-hover:shadow-lg transition-all">
-                                        <img src={article.img} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                        <img src={article.image} alt={article.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                                     </div>
                                     <div className="flex flex-col justify-center py-2">
                                         <span className="text-[10px] font-black uppercase text-primary tracking-widest mb-3">{article.tag}</span>
                                         <h3 className="text-2xl font-black mb-4 text-slate-900 dark:text-white group-hover:text-primary transition-colors leading-tight">{article.title}</h3>
-                                        <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6">{article.desc}</p>
+                                        <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 line-clamp-2">
+                                            {article.subtitle || "Comprehensive guide covering legal requirements, registration steps, and compliance for founders."}
+                                        </p>
                                         <div className="flex items-center gap-4 text-xs font-bold text-slate-400">
-                                            <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm">calendar_month</span> Jan 24, 2026</span>
-                                            <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm">timer</span> 8 min read</span>
+                                            <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm">calendar_month</span> {article.date}</span>
+                                            <span className="flex items-center gap-1.5"><span className="material-symbols-outlined text-sm">timer</span> {article.readTime}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -74,7 +60,6 @@ export const ResourceHub = ({ onNavigate }: { onNavigate: (view: string) => void
                     </section>
                 </div>
                 
-                {/* Sidebar Navigation */}
                 <aside className="lg:col-span-4 space-y-10">
                     <div className="bg-slate-900 p-10 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden ring-4 ring-primary/10">
                         <div className="relative z-10">
@@ -100,7 +85,6 @@ export const ResourceHub = ({ onNavigate }: { onNavigate: (view: string) => void
                         </div>
                     </div>
 
-                    {/* Simple Lead Magnet Widget */}
                     <div className="p-10 bg-primary/5 rounded-[2.5rem] border border-primary/20">
                         <h4 className="text-xl font-black text-slate-900 dark:text-white mb-4">Stay Synchronized</h4>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mb-8">Join 5,000+ founders receiving weekly UK regulatory updates and scaling insights.</p>
